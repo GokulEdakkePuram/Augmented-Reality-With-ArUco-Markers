@@ -29,7 +29,7 @@ ARUCO_DICT = {
 
 dicti = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
 
-image = cv.imread('Room with ArUco Markers-20240324/20221115_113319.jpg')
+image = cv.imread('Room with ArUco Markers-20240324/20221115_113412.jpg')
 plt.title('Image')
 plt.imshow(image[:,:,[2,1,0]])
 plt.show()
@@ -39,15 +39,16 @@ poster_image = cv.imread('ronaldo1.jpeg')
 plt.imshow(poster_image[:,:,[2,1,0]])
 plt.show()'''
 
-coord_poster = np.float32([[0,0],
-                [0, 620],
-                [450, 620],
-                [450, 0]])
+#coord_poster = np.float32([[0,0],
+#                [0, 620],
+#                [450, 620],
+#                [450, 0]])
+coord_poster = np.array([[0, 620],[0, 0], [450, 620], [450, 0]], dtype=np.float32)
 
 parameters = cv.aruco.DetectorParameters()
 corners, ids, rejected = cv.aruco.detectMarkers(image, dicti, parameters=parameters)
 
-corn_cord = np.array(corners[0][0])
+corn_cord = np.array(corners[0][0], dtype=np.float32)
 print(corn_cord)
 print(coord_poster)
 
@@ -59,7 +60,17 @@ print(rejected)
 #print(corners[0][0])
 #plt.scatter(corners)
 img_mod = image.copy()
+
+poster_trans = cv.warpPerspective(poster_image,M,(image.shape[1],image.shape[0]))
+
+cv.imshow('Trans Image',poster_trans)
+
+plt.title('Transformed Poster')
+plt.imshow(poster_trans[:,:,[2,1,0]])
+plt.show()
+
+
 x_offset=y_offset=1000
-img_mod[y_offset:y_offset+poster_image.shape[0], x_offset:x_offset+poster_image.shape[1]] = poster_image
+img_mod[y_offset:y_offset+poster_image.shape[0], x_offset:x_offset+poster_image.shape[1]] = poster_trans
 plt.imshow(img_mod[:,:,[2,1,0]])
 plt.show()
