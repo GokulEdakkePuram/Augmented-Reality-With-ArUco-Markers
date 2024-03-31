@@ -29,13 +29,20 @@ ARUCO_DICT = {
 
 dicti = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
 
-image = cv.imread('Room with ArUco Markers-20240324/20221115_113319.jpg')
-plt.title('Image')
-plt.imshow(image[:,:,[2,1,0]])
+#image = cv.imread('Room with ArUco Markers-20240324/20221115_113319.jpg')
+#plt.title('Image')
+#plt.imshow(image[:,:,[2,1,0]])
 #plt.show()
+
+image = cv.imread('ronaldo1.jpeg')
+plt.title('Poster Image')
+plt.imshow(image[:,:,[2,1,0]])
+plt.show()
 
 parameters = cv.aruco.DetectorParameters()
 corners, ids, rejected = cv.aruco.detectMarkers(image, dicti, parameters=parameters)
 print(corners)
 print(ids)
 print(rejected)
+print(corners[0][0])
+plt.scatter(corners)
