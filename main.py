@@ -29,20 +29,32 @@ ARUCO_DICT = {
 
 dicti = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
 
-#image = cv.imread('Room with ArUco Markers-20240324/20221115_113319.jpg')
+image = cv.imread('Room with ArUco Markers-20240324/20221115_113319.jpg')
 #plt.title('Image')
 #plt.imshow(image[:,:,[2,1,0]])
 #plt.show()
 
-image = cv.imread('ronaldo1.jpeg')
+poster_image = cv.imread('ronaldo1.jpeg')
 plt.title('Poster Image')
-plt.imshow(image[:,:,[2,1,0]])
-plt.show()
+plt.imshow(poster_image[:,:,[2,1,0]])
+#plt.show()
+
+coord_poster = np.float32([[0,0],
+                [0, 620],
+                [450, 620],
+                [450, 0]])
 
 parameters = cv.aruco.DetectorParameters()
 corners, ids, rejected = cv.aruco.detectMarkers(image, dicti, parameters=parameters)
+
+corn_cord = np.array(corners[0][0])
+print(corn_cord)
+print(coord_poster)
+
+M = cv.getPerspectiveTransform(coord_poster, corn_cord)
+print(M)
 print(corners)
 print(ids)
 print(rejected)
-print(corners[0][0])
+#print(corners[0][0])
 plt.scatter(corners)
