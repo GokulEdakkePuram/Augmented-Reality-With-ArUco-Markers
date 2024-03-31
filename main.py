@@ -30,14 +30,14 @@ ARUCO_DICT = {
 dicti = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
 
 image = cv.imread('Room with ArUco Markers-20240324/20221115_113319.jpg')
-#plt.title('Image')
-#plt.imshow(image[:,:,[2,1,0]])
-#plt.show()
+plt.title('Image')
+plt.imshow(image[:,:,[2,1,0]])
+plt.show()
 
 poster_image = cv.imread('ronaldo1.jpeg')
-plt.title('Poster Image')
+'''plt.title('Poster Image')
 plt.imshow(poster_image[:,:,[2,1,0]])
-#plt.show()
+plt.show()'''
 
 coord_poster = np.float32([[0,0],
                 [0, 620],
@@ -57,4 +57,9 @@ print(corners)
 print(ids)
 print(rejected)
 #print(corners[0][0])
-plt.scatter(corners)
+#plt.scatter(corners)
+img_mod = image.copy()
+x_offset=y_offset=1000
+img_mod[y_offset:y_offset+poster_image.shape[0], x_offset:x_offset+poster_image.shape[1]] = poster_image
+plt.imshow(img_mod[:,:,[2,1,0]])
+plt.show()
