@@ -26,52 +26,48 @@ ARUCO_DICT = {
 	"DICT_APRILTAG_36h11": cv.aruco.DICT_APRILTAG_36h11
 }
 '''
-
+root = 'Room with ArUco Markers-20240324/'
 dicti = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
 
-image = cv.imread('Room with ArUco Markers-20240324/20221115_113412.jpg')
-'''plt.title('Image')
-plt.imshow(image[:,:,[2,1,0]])
-plt.show()
-'''
-poster_image = cv.imread('ronaldo1.jpeg')
-'''plt.title('Poster Image')
-plt.imshow(poster_image[:,:,[2,1,0]])
-plt.show()'''
+images = ['20221115_113319','20221115_113328','20221115_113340','20221115_113346','20221115_113356','20221115_113401','20221115_113412','20221115_113424','20221115_113437','20221115_113440','20221115_113635']  # List of captured images
+for i in range(len(images)):
+    image = cv.imread(f"{root}/{images[i]}.jpg")
+    #image = cv.imread('Room with ArUco Markers-20240324/20221115_113412.jpg')
+    poster_image = cv.imread('ronaldo1.jpeg')
 
-coord_poster = np.array([[0, 0], [poster_image.shape[1], 0], [poster_image.shape[1], poster_image.shape[0]], [0, poster_image.shape[0]]], dtype=np.float32)
+    coord_poster = np.array([[0, 0], [poster_image.shape[1], 0], [poster_image.shape[1], poster_image.shape[0]], [0, poster_image.shape[0]]], dtype=np.float32)
 
-parameters = cv.aruco.DetectorParameters()
-corners, ids, rejected = cv.aruco.detectMarkers(image, dicti, parameters=parameters)
+    parameters = cv.aruco.DetectorParameters()
+    corners, ids, rejected = cv.aruco.detectMarkers(image, dicti, parameters=parameters)
 
-corn_cord = np.array(corners[0][0], dtype=np.float32)
-print(corn_cord)
-print(coord_poster)
+    corn_cord = np.array(corners[0][0], dtype=np.float32)
+    print(corn_cord)
+    print(coord_poster)
 
-M = cv.getPerspectiveTransform(coord_poster, corn_cord)
-print(M)
-print(corners)
-print(ids)
-print(rejected)
-print(f'Corners: {corners[0][0]}')
+    M = cv.getPerspectiveTransform(coord_poster, corn_cord)
+    print(M)
+    print(corners)
+    print(ids)
+    print(rejected)
+    print(f'Corners: {corners[0][0]}')
 
-M[0,0]*=5
-M[1,1]*=5
-#plt.scatter(corners)
-img_mod = image.copy()
+    M[0,0]*=5
+    M[1,1]*=5
+    #plt.scatter(corners)
+    img_mod = image.copy()
 
-poster_trans = cv.warpPerspective(poster_image,M,(image.shape[1],image.shape[0]))
-cv.imshow('Trans Image',poster_trans)
-plt.title('Transformed Poster')
-plt.imshow(poster_trans[:,:,[2,1,0]])
-plt.show()
+    poster_trans = cv.warpPerspective(poster_image,M,(image.shape[1],image.shape[0]))
+    cv.imshow('Trans Image',poster_trans)
+    plt.title('Transformed Poster')
+    plt.imshow(poster_trans[:,:,[2,1,0]])
+    plt.show()
 
-poster_gray = cv.cvtColor(poster_trans, cv.COLOR_BGR2GRAY)
-ret, mask = cv.threshold(poster_gray, 1, 255, cv.THRESH_BINARY)
-mask = cv.bitwise_not(mask)
-result_image = cv.bitwise_and(image, image, mask=mask)
+    poster_gray = cv.cvtColor(poster_trans, cv.COLOR_BGR2GRAY)
+    ret, mask = cv.threshold(poster_gray, 1, 255, cv.THRESH_BINARY)
+    mask = cv.bitwise_not(mask)
+    result_image = cv.bitwise_and(image, image, mask=mask)
 
-final_result = cv.add(result_image, poster_trans)
-plt.title('Transformed Poster')
-plt.imshow(final_result[:,:,[2,1,0]])
-plt.show()
+    final_result = cv.add(result_image, poster_trans)
+    plt.title('Transformed Poster')
+    plt.imshow(final_result[:,:,[2,1,0]])
+    plt.show()
