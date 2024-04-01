@@ -65,3 +65,13 @@ cv.imshow('Trans Image',poster_trans)
 plt.title('Transformed Poster')
 plt.imshow(poster_trans[:,:,[2,1,0]])
 plt.show()
+
+poster_gray = cv.cvtColor(poster_trans, cv.COLOR_BGR2GRAY)
+ret, mask = cv.threshold(poster_gray, 1, 255, cv.THRESH_BINARY)
+mask = cv.bitwise_not(mask)
+result_image = cv.bitwise_and(image, image, mask=mask)
+
+final_result = cv.add(result_image, poster_trans)
+plt.title('Transformed Poster')
+plt.imshow(final_result[:,:,[2,1,0]])
+plt.show()
