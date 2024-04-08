@@ -26,8 +26,10 @@ ARUCO_DICT = {
 	"DICT_APRILTAG_36h11": cv.aruco.DICT_APRILTAG_36h11
 }
 '''
-root = 'Room with ArUco Markers-20240324/'
+root = '/Users/gokulmnambiar/Desktop/Semester 2/Tasks/ComputerVision/Augmented-Reality-With-ArUco-Markers/Room with ArUco Markers-20240324'
 dicti = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
+parameters = cv.aruco.DetectorParameters()
+detector = cv.aruco.ArucoDetector(dicti, parameters)
 
 images = ['20221115_113319','20221115_113328','20221115_113340','20221115_113346','20221115_113356','20221115_113401','20221115_113412','20221115_113424','20221115_113437','20221115_113440','20221115_113635']  # List of captured images
 for i in range(len(images)):
@@ -35,10 +37,12 @@ for i in range(len(images)):
     print(i)
     image = cv.imread(f"{root}/{images[i]}.jpg")
     #image = cv.imread('Room with ArUco Markers-20240324/20221115_113412.jpg')
-    poster_image = cv.imread('ronaldo1.jpeg')
+    poster_image = cv.imread('ComputerVision/Augmented-Reality-With-ArUco-Markers/ronaldo1.jpeg')
+    cv.imshow('R',poster_image)
+    print(poster_image.shape)
     coord_poster = np.array([[0, 0], [poster_image.shape[1], 0], [poster_image.shape[1], poster_image.shape[0]], [0, poster_image.shape[0]]], dtype=np.float32)
-    parameters = cv.aruco.DetectorParameters()
-    corners, ids, rejected = cv.aruco.detectMarkers(image, dicti, parameters=parameters)
+    
+    corners, ids, rejected = detector.detectMarkers(image)
 
     corn_cord = np.array(corners[0][0], dtype=np.float32)
     print(corn_cord)
