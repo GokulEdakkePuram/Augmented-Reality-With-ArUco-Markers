@@ -37,20 +37,25 @@ for i in range(len(images)):
     print(i)
     image = cv.imread(f"{root}/{images[i]}.jpg")
     #image = cv.imread('Room with ArUco Markers-20240324/20221115_113412.jpg')
-    poster_image = cv.imread('ComputerVision/Augmented-Reality-With-ArUco-Markers/ronaldo1.jpeg')
+    poster_image = cv.imread('/Users/gokulmnambiar/Desktop/Semester 2/Tasks/ComputerVision/Augmented-Reality-With-ArUco-Markers/intro-1672072042.jpg')
     #cv.imshow('R',poster_image)
     print(poster_image.shape)
     #coord_poster = np.array([[0, 0], [poster_image.shape[1], 0], [poster_image.shape[1], poster_image.shape[0]], [0, poster_image.shape[0]]], dtype=np.float32)
-    coord_poster = np.array([[250, 200], [300, 200], [300, 250], [250, 250]], dtype=np.float32)
+    coord_poster = np.array([[250, 200], [320, 200], [320, 270], [250, 270]], dtype=np.float32)
+    #coord_poster = np.array([[((poster_image.shape[1]/2)-20), ((poster_image.shape[0]/2)-20)], [((poster_image.shape[1]/2)+20), ((poster_image.shape[0]/2)-20)], [((poster_image.shape[1]/2)+20), ((poster_image.shape[0]/2)+20)], [((poster_image.shape[1]/2)-20), ((poster_image.shape[0]/2)+20)]], dtype=np.float32)
     
-    corners, ids, rejected = detector.detectMarkers(image)
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    corners, ids, rejected = detector.detectMarkers(gray)
     out = cv.aruco.drawDetectedMarkers(image, corners, ids)
 
     corn_cord = np.array(corners[0][0], dtype=np.float32)
     print(corn_cord)
     print(coord_poster)
+    
+    corners_refined = cv.cornerSubPix(gray, corn_cord, (1, 1), (-1, -1), criteria=(cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001))
 
-    M = cv.getPerspectiveTransform(coord_poster, corn_cord)
+    M = cv.getPerspectiveTransform(coord_poster, corners_refined)
     print(M)
     print(corners)
     print(ids)
