@@ -38,11 +38,13 @@ for i in range(len(images)):
     image = cv.imread(f"{root}/{images[i]}.jpg")
     #image = cv.imread('Room with ArUco Markers-20240324/20221115_113412.jpg')
     poster_image = cv.imread('ComputerVision/Augmented-Reality-With-ArUco-Markers/ronaldo1.jpeg')
-    cv.imshow('R',poster_image)
+    #cv.imshow('R',poster_image)
     print(poster_image.shape)
-    coord_poster = np.array([[0, 0], [poster_image.shape[1], 0], [poster_image.shape[1], poster_image.shape[0]], [0, poster_image.shape[0]]], dtype=np.float32)
+    #coord_poster = np.array([[0, 0], [poster_image.shape[1], 0], [poster_image.shape[1], poster_image.shape[0]], [0, poster_image.shape[0]]], dtype=np.float32)
+    coord_poster = np.array([[250, 200], [300, 200], [300, 250], [250, 250]], dtype=np.float32)
     
     corners, ids, rejected = detector.detectMarkers(image)
+    out = cv.aruco.drawDetectedMarkers(image, corners, ids)
 
     corn_cord = np.array(corners[0][0], dtype=np.float32)
     print(corn_cord)
@@ -54,16 +56,15 @@ for i in range(len(images)):
     print(ids)
     print(rejected)
     print(f'Corners: {corners[0][0]}')
-
     
     #plt.scatter(corners)
     img_mod = image.copy()
 
     poster_trans = cv.warpPerspective(poster_image,M,(image.shape[1],image.shape[0]))
     #cv.imshow('Trans Image',poster_trans)
-    '''plt.title('Transformed Poster')
+    plt.title('Transformed Poster')
     plt.imshow(poster_trans[:,:,[2,1,0]])
-    plt.show()'''
+    plt.show()
 
     poster_gray = cv.cvtColor(poster_trans, cv.COLOR_BGR2GRAY)
     ret, mask = cv.threshold(poster_gray, 1, 255, cv.THRESH_BINARY)
